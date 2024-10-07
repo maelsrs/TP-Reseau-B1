@@ -151,11 +151,104 @@ PS C:\Windows\system32> netstat -a -b -n | Select-String 9999
 
 - Site web: (https://youtube.com)
   - [Capture](service1.pcap)
+```powershell  
+PS C:\Windows\system32> netstat -a -b -n
+
+Connexions actives
+[...]
+
+ [brave.exe]
+  TCP    10.33.78.252:15881     2.16.149.11:443        ESTABLISHED
+
+[...]
+```
 - Spotify
   - [Capture](service2.pcap)
+```powershell
+PS C:\Windows\system32> netstat -a -b -n
+
+Connexions actives
+[...]
+ [Spotify.exe]
+  TCP    10.33.78.252:16172     35.186.224.24:443      ESTABLISHED
+ [Spotify.exe]
+  TCP    10.33.78.252:16173     199.232.210.248:443    ESTABLISHED
+ [Spotify.exe]
+  TCP    10.33.78.252:16174     199.232.210.248:443    ESTABLISHED
+ [Spotify.exe]
+  TCP    10.33.78.252:16175     35.186.224.24:443      ESTABLISHED
+ [Spotify.exe]
+  TCP    10.33.78.252:16176     199.232.214.251:443    ESTABLISHED
+ [Spotify.exe]
+  TCP    10.33.78.252:16178     35.186.224.24:443      ESTABLISHED
+ [Spotify.exe]
+[...] 
+ ```
 - Steam
   - [Capture](service3.pcap)
+
+```powershell
+PS C:\Windows\system32> netstat -a -b -n
+
+Connexions actives
+[...]
+ [Steam.exe]
+  TCP    10.33.78.252:16342     155.133.248.43:27018   ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16343     155.133.248.42:443     ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16344     155.133.248.42:27018   ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16345     155.133.226.78:27036   ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16348     2.16.149.148:80        ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16349     2.16.149.148:80        ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16350     95.101.110.201:443     ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16351     95.101.110.202:443     ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16352     95.101.110.201:443     ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16353     95.101.110.201:443     ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16354     95.101.110.202:443     ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16355     95.101.110.202:443     ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16356     104.121.10.34:443      ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16357     104.121.10.34:443      ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16358     104.121.10.34:443      ESTABLISHED
+ [Steam.exe]
+  TCP    10.33.78.252:16359     2.20.41.119:443        ESTABLISHED
+[...] 
+```
+*(il y en avait beaucoup plus...)*
 - Discord
   - [Capture](service4.pcap)
+
+```powershell
+PS C:\Windows\system32> netstat -a -b -n
+
+Connexions actives
+[...] 
+ [Discord.exe]
+  TCP    10.33.78.252:16453     162.159.136.234:443    ESTABLISHED
+ [Discord.exe]
+  TCP    10.33.78.252:16471     35.186.224.45:443      ESTABLISHED
+[...] 
+```
 - Anki
   - [Capture](service5.pcap)
+```powershell
+PS C:\Windows\system32> netstat -a -b -n
+
+Connexions actives
+[...] 
+ [anki.exe]
+  TCP    10.33.78.252:16599     142.132.136.175:443    ESTABLISHED
+[...] 
+```
