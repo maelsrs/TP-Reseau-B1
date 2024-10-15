@@ -213,12 +213,70 @@ DNS1=1.1.1.1
 
 ### B. Test avec un nouveau client
 
+**☀️ Créez une nouvelle machine client client3.tp5.b1**
+
+- définissez son hostname
+
+```powershell
+mael@mael-vb:~$ sudo hostnamectl set-hostname client3.tp5.b1
+[sudo] password for mael:
+mael@mael-vb:~$
+```
+
+- définissez une IP en DHCP
+
+```powershell
+mael@client3:~$ cat /etc/netplan/01-netcfg.yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s8:
+      dhcp4: yes
+
+mael@client3:~$ sudo netplan apply
+[sudo] password for mael:
+
+** (generate:5104): WARNING **: 16:21:48.702: Permissions for /etc/netplan/01-netcfg.yaml are too open. Netplan configuration should NOT be accessible by others.
+
+** (process:5103): WARNING **: 16:21:48.996: Permissions for /etc/netplan/01-netcfg.yaml are too open. Netplan configuration should NOT be accessible by others.
+
+** (process:5103): WARNING **: 16:21:49.079: Permissions for /etc/netplan/01-netcfg.yaml are too open. Netplan configuration should NOT be accessible by others.
+mael@client3:~$
+```
+
+- vérifiez que c'est bien une adresse IP entre .137 et .237
+```powershell
+mael@client3:~$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute
+       valid_lft forever preferred_lft forever
+2: enp0s8: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:85:ab:d4 brd ff:ff:ff:ff:ff:ff
+    inet 10.5.1.139/24 metric 100 brd 10.5.1.255 scope global dynamic enp0s8
+       valid_lft 43154sec preferred_lft 43154sec
+    inet6 fe80::a00:27ff:fe85:abd4/64 scope link
+       valid_lft forever preferred_lft forever
+
+```
+- prouvez qu'il a immédiatement un accès internet
+```powershell
+mael@client3:~$ ping ynov.com
+PING ynov.com (104.26.11.233) 56(84) bytes of data.
+64 bytes from 104.26.11.233: icmp_seq=1 ttl=54 time=14.3 ms
+64 bytes from 104.26.11.233: icmp_seq=2 ttl=54 time=13.6 ms
+64 bytes from 104.26.11.233: icmp_seq=3 ttl=54 time=17.8 ms
+```
 ### C. Consulter le bail DHCP
 
 ☀️ **Consultez le *bail DHCP* qui a été créé pour notre client**
 
 ```powershell
 [root@routeur mael]# cat /var/lib/dhcpd/dhcpd.leases
+[...]
 lease 10.5.1.139 {
   starts 2 2024/10/15 11:15:26;
   ends 2 2024/10/15 23:15:26;
