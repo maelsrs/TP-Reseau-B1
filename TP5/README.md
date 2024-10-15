@@ -20,7 +20,7 @@
 **☀️ Uniquement avec des commandes, prouvez-que :**
 
 - vous avez bien configuré les adresses IP demandées (un `ip a` suffit hein)
- ```bash
+ ```powershell
  [root@routeur mael]# ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -35,7 +35,7 @@
     inet6 fe80::a00:27ff:fe66:5266/64 scope link
        valid_lft forever preferred_lft forever
 ```
-```bash
+```powershell
 mael@client1~$ ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -50,7 +50,7 @@ mael@client1~$ ip a
     inet6 fe80::a00:27ff:fe0a:5a44/64 scope link
        valid_lft forever preferred_lft forever
 ```
-```bash
+```powershell
 mael@client2:~$ ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -67,7 +67,7 @@ mael@client2:~$ ip a
 ***Les hostnames sont configurés (visibles au dessus)***
 - tout le monde peut se ping au sein du réseau `10.5.1.0/24`
 
-```sh
+```powershell
 [root@routeur mael]# ping 10.5.1.11
 PING 10.5.1.11 (10.5.1.11) 56(84) bytes of data.
 64 bytes from 10.5.1.11: icmp_seq=1 ttl=64 time=0.622 ms
@@ -99,16 +99,25 @@ PING 10.5.1.11 (10.5.1.11) 56(84) bytes of data.
 
 ☀️ **Déjà, prouvez que le routeur a un accès internet**
 
-```bash
+```powershell
 [root@routeur mael]# ping ynov.com
 PING ynov.com (172.67.74.226) 56(84) bytes of data.
 64 bytes from 172.67.74.226 (172.67.74.226): icmp_seq=1 ttl=54 time=21.5 ms
+```
+
+**☀️ Activez le routage**
+
+```powershell
+[root@routeur mael]# sudo firewall-cmd --add-masquerade --permanent
+success
+[root@routeur mael]# sudo firewall-cmd --reload
+success
 ```
 ## 2. Accès internet clients
 
 ☀️ **Prouvez que les clients ont un accès internet**
 
- ```bash
+ ```powershell
 root@client1:/home/mael# ping 1.1.1.1
 PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.
 64 bytes from 1.1.1.1: icmp_seq=1 ttl=50 time=183 ms
@@ -116,7 +125,7 @@ PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.
 64 bytes from 1.1.1.1: icmp_seq=3 ttl=50 time=337 ms
 ```
 
-```bash
+```powershell
 root@client2:/home/mael# ping ynov.com
 PING ynov.com (104.26.10.233) 56(84) bytes of data.
 64 bytes from 104.26.10.233: icmp_seq=1 ttl=50 time=116 ms
@@ -141,7 +150,7 @@ network:
 
 ☀️ **Sur `routeur.tp5.b1`, déterminer sur quel port écoute le serveur SSH**
 
-```bash
+```powershell
 [root@routeur mael]# sudo ss -lnpt | grep 22
 LISTEN 0      128          0.0.0.0:22        0.0.0.0:*    users:(("sshd",pid=660,fd=3))
 LISTEN 0      128             [::]:22           [::]:*    users:(("sshd",pid=660,fd=4))
@@ -150,10 +159,17 @@ LISTEN 0      128             [::]:22           [::]:*    users:(("sshd",pid=660
 ☀️ **Sur `routeur.tp5.b1`, vérifier que ce port est bien ouvert**
 
 *verifier que le port est ouvert, en étant actuellement connecté en ssh, c'est drôle*
-```
-[root@routeur mael]# sudo ss -npt
-State        Recv-Q        Send-Q               Local Address:Port               Peer Address:Port       Process
-ESTAB        0             52                      10.5.1.254:22                     10.5.1.1:7577        users:(("sshd",pid=1286,fd=4),("sshd",pid=1270,fd=4))
+
+firewalld autorise les connexions au service ssh, et iptables ne bloque rien, alors le port ssh est ouvert.
+```powershell
+[root@routeur mael]# sudo firewall-cmd --list-all
+public (active)
+[...]
+  interfaces: enp0s3 enp0s8
+  services: dhcp dhcpv6-client ssh
+  forward: yes
+  masquerade: yes
+[...]
 ```
 
 # IV. Serveur DHCP
@@ -164,11 +180,13 @@ ESTAB        0             52                      10.5.1.254:22                
 
 ☀️ **Installez et configurez un serveur DHCP sur la machine `routeur.tp5.b1`**
 
-```bash
+```powershell
 [root@routeur mael]# dnf install -y dhcp-server
+[...]
+Complete!
 ```
 
-```bash
+```powershell
 [root@routeur mael]# cat /etc/dhcp/dhcpd.conf
 authoritative;
 subnet 10.5.1.0 netmask 255.255.255.0 {
@@ -179,13 +197,13 @@ subnet 10.5.1.0 netmask 255.255.255.0 {
 }
 ```
 
-```bash
+```powershell
 [root@routeur mael]# cat /etc/sysconfig/network-scripts/ifcfg-enp0s8
 DEVICE=enp0s8
 NAME=len
 
 ONBOOT=yes
-BOOTPROTO=dhcp
+BOOTPROTO=static
 
 IPADDR=10.5.1.254
 NETMASK=255.255.255.0
@@ -199,7 +217,8 @@ DNS1=1.1.1.1
 
 ☀️ **Consultez le *bail DHCP* qui a été créé pour notre client**
 
-```bash
+```powershell
+[root@routeur mael]# cat /var/lib/dhcpd/dhcpd.leases
 lease 10.5.1.139 {
   starts 2 2024/10/15 11:15:26;
   ends 2 2024/10/15 23:15:26;
@@ -215,8 +234,8 @@ lease 10.5.1.139 {
 
 ☀️ **Confirmez qu'il s'agit bien de la bonne adresse MAC**
 
-```bash
-mael@mael-vb:~$ ip a
+```powershell
+mael@client3:~$ ip a
 [...]
 2: enp0s8: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 08:00:27:85:ab:d4 brd ff:ff:ff:ff:ff:ff
@@ -225,3 +244,7 @@ mael@mael-vb:~$ ip a
     inet6 fe80::a00:27ff:fe85:abd4/64 scope link
        valid_lft forever preferred_lft forever
 ```
+
+# Bonus
+
+ça arrive 🌏...
