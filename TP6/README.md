@@ -284,6 +284,7 @@ ynov.com.       300     IN      A       172.67.74.226
 ;; SERVER: 10.6.2.12
 ;; WHEN: Wed Oct 16 12:50:35 2024
 ;; MSG SIZE  rcvd: 74
+
 mael@client1:~$ drill web.tp6.b1 @10.6.2.12
 ;; ->>HEADER<<- opcode: QUERY, rcode: NOERROR, id: 53764
 ;; flags: qr aa rd ra ; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
@@ -312,6 +313,57 @@ web.tp6.b1.     86400   IN      A       10.6.2.11
 
 - récupérez une IP en DHCP sur ce nouveau client2.tp6.b1
 
+```powershell
+mael@client2:~$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute
+       valid_lft forever preferred_lft forever
+2: enp0s8: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:4e:b2:e9 brd ff:ff:ff:ff:ff:ff
+    inet 10.6.1.37/24 brd 10.6.1.255 scope global dynamic noprefixroute enp0s8
+       valid_lft 43048sec preferred_lft 43048sec
+    inet6 fe80::ea7a:25d7:1dea:c865/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
+```   
 - vérifiez que vous avez bien 10.6.2.12 comme serveur DNS à contacter
 
+```powershell
+mael@client2:~$ resolvectl
+Global
+         Protocols: -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+  resolv.conf mode: stub
+
+Link 2 (enp0s8)
+    Current Scopes: DNS
+         Protocols: +DefaultRoute -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+Current DNS Server: 10.6.2.12
+       DNS Servers: 10.6.2.12
+```
+
 - Vous devriez pouvoir visiter http://web.tp6.b1 avec le navigateur, ça devrait fonctionner sans aucune autre action.
+
+```powershell
+
+mael@client2:~$ curl http://web.tp6.b1
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>HTTP Server Test Page powered by: Rocky Linux</title>
+    <style type="text/css">
+
+[...]
+
+  </style>
+  </head>
+  <body>
+    <h1>HTTP Server <strong>Test Page</strong></h1>
+
+[...]
+  </body>
+</html>
+```
