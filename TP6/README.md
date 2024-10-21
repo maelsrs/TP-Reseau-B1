@@ -367,3 +367,27 @@ mael@client2:~$ curl http://web.tp6.b1
   </body>
 </html>
 ```
+
+
+# Bonus Scapy
+
+## 1. Play it legit
+
+**🌞 ping.py**
+
+[Fichier ping.py](ping.py)
+
+**🌞 dns_request.py**
+
+[Fichier dns_request.py](dns_request.py)
+
+**🌞 dhcp request.py**
+
+[Fichier dhcp_request.py](dhcp_request.py)
+## 2. Maybe not
+
+### A. DHCP starvation
+
+**🌞 dhcp_starvation.py**
+
+**🌞 simplest_dhcp_server.py**
