@@ -7,7 +7,6 @@
   - [Sommaire](#sommaire)
 - [II. Serveur Web](#ii-serveur-web)
   - [1. HTTP](#1-http)
-    - [A. Install](#a-install)
     - [B. Configuration](#b-configuration)
     - [C. Tests client](#c-tests-client)
     - [D. Analyze](#d-analyze)
@@ -18,7 +17,6 @@
 - [III. Serveur VPN](#iii-serveur-vpn)
 
   - [1. Install et conf Wireguard](#1-install-et-conf-wireguard)
-  - [2. Ajout d'un client VPN](#2-ajout-dun-client-vpn)
   - [3. Proofs](#3-proofs)
   - [4. Private service](#4-private-service)
 
@@ -138,12 +136,12 @@ UNCONN 0      0               [::]:51820         [::]:*
 
 🌞 **Ouvrez ce port dans le firewall**
 
+```powershell
 [root@web mael]# sudo firewall-cmd --permanent --add-port=51820/udp
 success
 [root@web mael]# sudo firewall-cmd --reload
 success
-
-## 2. Ajout d'un client VPN
+```
 
 ## 3. Proofs
 🌞 **Ping ping ping !**
