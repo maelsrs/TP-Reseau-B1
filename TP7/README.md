@@ -159,6 +159,11 @@ PING 10.7.200.1 (10.7.200.1) 56(84) bytes of data.
 
 [Fichier ping1_vpn.pcap](ping1_vpn.pcap)
 
+🌞 **Capture ping2_vpn.pcap**
+
+[Fichier ping2_vpn.pcap](ping2_vpn.pcap)
+
+
 🌞 **Prouvez que vous avez toujours un accès internet**
 
 ```powershell
@@ -199,3 +204,12 @@ traceroute to 1.1.1.1 (1.1.1.1), 30 hops max, 60 byte packets
 
 🌞 **Visitez le service Web à travers le VPN**
 
+```powershell
+root@client1:/home/mael# cat /etc/hosts
+127.0.0.1 localhost
+127.0.1.1 client1.tp7.b1
+10.7.200.37 sitedefou.tp7.b1
+
+root@client1:/home/mael# curl https://sitedefou.tp7.b1  -k
+meow !
+```
