@@ -87,6 +87,8 @@ LISTEN 0      511        10.7.1.11:443       0.0.0.0:*    users:(("nginx",pid=17
 ```powershell
 [root@web mael]# sudo firewall-cmd --permanent --add-port=443/tcp
 success
+[root@web mael]# sudo firewall-cmd --permanent --remove-port=443/tcp
+success
 [root@web mael]# sudo firewall-cmd --reload
 success
 ```
